@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hospital Appointments</title>
+    <link href="assets/css/style.css" rel="stylesheet" />
+    <script>
+const apiUrl = "http://127.0.0.1:5000";
+
+async function loadAppointments() {
+  const res = await fetch(apiUrl);
+  const data = await res.json();
+
+  const table = document.getElementById("appointments");
+  table.innerHTML = "";
+  data.forEach(row => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${row.PatientName}</td>
+      <td>${row.PSex}</td>
+      <td>${row.PAge}</td>
+      <td>${row.InsuranceName}</td>
+      <td>${row.DoctorName}</td>
+      <td>${row.Specialization}</td>
+      <td>${row.Date}</td>
+      <td>${row.Time}</td>
+    `;
+    table.appendChild(tr);
+  });
+}
+
+loadAppointments();
+</script>
+
+</head>
+<body>
+    <h1>Hospital Appointment Schedule</h1>
+
+    <table>
+        <tr>
+            <th>Patient Name</th>
+            <th>Sex</th>
+            <th>Age</th>
+            <th>Insurance</th>
+            <th>Location</th>
+            <th>Doctor</th>
+            <th>Specialization</th>
+            <th>Date</th>
+            <th>Time</th>
+        </tr>
+        {% for row in rows %}
+        <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+            <td>{{ row[4] }}</td>
+            <td>{{ row[5] }}</td>
+            <td>{{ row[6] }}</td>
+            <td>{{ row[7] }}</td>
+            <td>{{ row[8] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Schedule a New Appointment</h2>
+
+    <form action="/add_appointment" method="POST">
+        <label for="patient">Select Patient:</label>
+        <select name="patient" id="patient" required>
+            {% for p in patients %}
+            <option value="{{ p[0] }}">{{ p[1] }} ({{ p[0] }})</option>
+            {% endfor %}
+        </select>
+
+        <label for="doctor">Select Doctor:</label>
+        <select name="doctor" id="doctor" required>
+            {% for d in doctors %}
+            <option value="{{ d[0] }}">{{ d[1] }} ({{ d[0] }})</option>
+            {% endfor %}
+        </select>
+
+        <label for="date">Select Date:</label>
+        <input type="date" name="date" required>
+
+        <label for="time">Select Time:</label>
+        <input type="time" name="time" required>
+
+        <button type="submit">Add Appointment</button>
+    </form>
+
+
+</body>
+</html>

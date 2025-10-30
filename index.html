@@ -1,51 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Hospital Patients</title>
+  <title>Hospital</title>
+    <link href="Assets/css/style.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap" rel="stylesheet">
+ <script>
+const apiUrl = "http://127.0.0.1:5000";
+
+async function loadAppointments() {
+  const res = await fetch(apiUrl);
+  const data = await res.json();
+
+  const table = document.getElementById("appointments");
+  table.innerHTML = "";
+  data.forEach(row => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${row.PatientName}</td>
+      <td>${row.PSex}</td>
+      <td>${row.PAge}</td>
+      <td>${row.InsuranceName}</td>
+      <td>${row.DoctorName}</td>
+      <td>${row.Specialization}</td>
+      <td>${row.Date}</td>
+      <td>${row.Time}</td>
+    `;
+    table.appendChild(tr);
+  });
+}
+
+loadAppointments();
+</script>
 </head>
 <body>
-  <h1>Patients List</h1>
-  <ul id="patients"></ul>
-
-  <h2>Add a New Patient</h2>
-  <input id="name" placeholder="Name">
-  <input id="age" placeholder="Age">
-  <input id="diagnosis" placeholder="Diagnosis">
-  <button onclick="addPatient()">Add</button>
-
-  <script>
-    const apiUrl = "http://127.0.0.1:5000/patients";
-
-    // Fetch patients from backend
-    async function loadPatients() {
-      const res = await fetch(apiUrl);
-      const patients = await res.json();
-
-      const list = document.getElementById("patients");
-      list.innerHTML = "";
-      patients.forEach(p => {
-        const li = document.createElement("li");
-        li.textContent = `${p.name} - ${p.age} - ${p.diagnosis}`;
-        list.appendChild(li);
-      });
-    }
-
-    // Add a new patient
-    async function addPatient() {
-      const name = document.getElementById("name").value;
-      const age = document.getElementById("age").value;
-      const diagnosis = document.getElementById("diagnosis").value;
-
-      await fetch(apiUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, age, diagnosis })
-      });
-
-      loadPatients(); // refresh list
-    }
-
-    loadPatients(); // initial load
-  </script>
+  <header role="banner" class="primary">
+  <h1>Home</h1>
+  <ul>
+    <li><a href= "PatientLogin/Patientlogin.html"> Patient Login</a></li>
+    <li><a href= "DoctorLogin/DocLogin.html"> Doctor Login</a></li>
+    <li><a href= "Doctor/Doctor.html"> Doctor </a></li>
+    <li><a href="Appointments/appoint.html">Appointments</a></li>
+  </ul>
+  </header>
 </body>
 </html>

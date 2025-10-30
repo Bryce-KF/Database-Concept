@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hospital Patients</title>
+</head>
+<body>
+  <h1>Patients List</h1>
+  <ul id="patients" ></ul>
+
+  <h2>Add a New Patient</h2>
+  <input id="name" placeholder="Name">
+  <input id="age" placeholder="Age">
+  <input id="diagnosis" placeholder="Diagnosis">
+  <button onclick="getPatient()">Add</button>
+
+  <script>
+    const apiUrl = "http://127.0.0.1:5000/patients";
+
+    // Fetch patients from backend
+    async function loadPatients() {
+      const res = await fetch(apiUrl);
+      const patients = await res.json();
+
+      const list = document.getElementById("patients");
+      list.innerHTML = "";
+      patients.forEach(p => {
+        const li = document.createElement("li");
+        li.textContent = `${p.name} - ${p.age} - ${p.diagnosis}`;
+        list.appendChild(li);
+      });
+    }
+
+    // Add a new patient
+    async function addPatient() {
+      const name = document.getElementById("name").value;
+      const age = document.getElementById("age").value;
+      const diagnosis = document.getElementById("diagnosis").value;
+
+      await fetch(apiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "Patient/json" },
+        body: JSON.stringify({ name})
+      });
+
+      loadPatients(); // refresh list
+    }
+
+    loadPatients(); // initial load
+  </script>
+</body>
+</html>
